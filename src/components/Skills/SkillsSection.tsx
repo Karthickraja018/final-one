@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useTheme } from '../../App';
 import SkillCard from './SkillCard';
+import { SiReact, SiJavascript, SiTypescript, SiHtml5, SiCss3, SiTailwindcss, SiNextdotjs, SiNodedotjs, SiExpress, SiMongodb, SiPostgresql, SiGraphql, SiApollographql, SiGit, SiDocker, SiAmazon, SiJest, SiFigma, SiVscodium } from 'react-icons/si';
+
 const SkillsSection = () => {
   const {
     theme
@@ -17,81 +19,81 @@ const SkillsSection = () => {
     id: 'tools',
     label: 'Tools & Others'
   }];
-  const skills = {
+  const skills: Record<string, { name: string; level: number; icon: React.ReactNode }[]> = {
     frontend: [{
       name: 'React',
       level: 90,
-      icon: '⚛️'
+      icon: <SiReact />
     }, {
       name: 'JavaScript',
       level: 85,
-      icon: '𝕁𝕊'
+      icon: <SiJavascript />
     }, {
       name: 'TypeScript',
       level: 80,
-      icon: '𝕋𝕊'
+      icon: <SiTypescript />
     }, {
       name: 'HTML & CSS',
       level: 90,
-      icon: '🌐'
+      icon: <><SiHtml5 /><SiCss3 style={{ marginLeft: 4 }} /></>
     }, {
       name: 'Tailwind CSS',
       level: 85,
-      icon: '🌊'
+      icon: <SiTailwindcss />
     }, {
       name: 'Next.js',
       level: 75,
-      icon: '▲'
+      icon: <SiNextdotjs />
     }],
     backend: [{
       name: 'Node.js',
       level: 85,
-      icon: '🟢'
+      icon: <SiNodedotjs />
     }, {
       name: 'Express',
       level: 80,
-      icon: '🚂'
+      icon: <SiExpress />
     }, {
       name: 'MongoDB',
       level: 75,
-      icon: '🍃'
+      icon: <SiMongodb />
     }, {
       name: 'PostgreSQL',
       level: 70,
-      icon: '🐘'
+      icon: <SiPostgresql />
     }, {
       name: 'GraphQL',
       level: 65,
-      icon: '◯'
+      icon: <SiGraphql />
     }, {
       name: 'REST API',
       level: 90,
-      icon: '🔄'
+      icon: <SiApollographql />
     }],
     tools: [{
       name: 'Git',
       level: 85,
-      icon: '🔀'
+      icon: <SiGit />
     }, {
       name: 'Docker',
       level: 70,
-      icon: '🐳'
+      icon: <SiDocker />
     }, {
       name: 'AWS',
       level: 65,
-      icon: '☁️'
+      icon: <SiAmazon />
     }, {
       name: 'Jest',
       level: 75,
-      icon: '🃏'
+      icon: <SiJest />
     }, {
       name: 'Figma',
       level: 70,
-      icon: '🎨'
+      icon: <SiFigma />
     }, {
       name: 'VS Code',
       level: 90,
-      icon: '📝'
+      icon: <SiVscodium />
     }]
   };
   return <section id="skills" className={`py-20 w-full ${theme === 'dark' ? 'bg-gray-800' : 'bg-gray-50'}`}>
