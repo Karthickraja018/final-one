@@ -1,21 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { ArrowDownIcon, GithubIcon, LinkedinIcon, TwitterIcon } from 'lucide-react';
+import { ArrowDownIcon, GithubIcon, LinkedinIcon, TwitterIcon, DownloadIcon, CodeIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../App';
 import Particles from 'react-tsparticles';
 import { loadFull } from 'tsparticles';
-
+import { Typewriter } from 'react-simple-typewriter';
+import Tilt from 'react-parallax-tilt';
 
 const HeroSection = () => {
   const { theme } = useTheme();
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const particlesInit = async (main: any) => {
     await loadFull(main);
   };
 
+  // Greeting based on time of day
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good Morning';
+    if (hour < 18) return 'Good Afternoon';
+    return 'Good Evening';
+  };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.body.scrollHeight - window.innerHeight;
+      const progress = (scrollTop / docHeight) * 100;
+      setScrollProgress(progress);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   return (
     <section id="home" className="min-h-screen w-full flex items-center pt-20 relative overflow-hidden">
+      {/* Scroll Progress Bar */}
+      <div className="fixed top-0 left-0 h-1 bg-purple-600 z-50" style={{ width: `${scrollProgress}%` }} />
+
       {/* Particle Background */}
       <Particles
         id="tsparticles"
@@ -54,8 +78,8 @@ const HeroSection = () => {
       {/* Main Content */}
       <div className="container mx-auto px-6 py-12 md:py-24 flex flex-col md:flex-row items-center relative z-10">
         <div className="flex-1">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="mb-6">
-            <span className="text-purple-600 font-medium">Hello, I'm</span>
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="mb-2">
+            <span className="text-purple-600 font-medium">{getGreeting()}, I'm</span>
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -63,16 +87,28 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="text-4xl md:text-6xl font-bold mb-4"
           >
-            <span className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>Karthick </span>
-            <span className="text-purple-600">Developer</span>
+            <span className={theme === 'dark' ? 'text-white' : 'text-gray-900'}>Karthick Raja</span>
+            <span className="text-purple-600">{/*Role*/}</span>
           </motion.h1>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className={`text-xl md:text-2xl font-medium mb-6 ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}
+            className={`text-xl md:text-2xl font-medium mb-6 ${theme === 'dark' ? 'text-purple-600' : 'text-gray-600'}`}
           >
-            Full Stack Developer & UI/UX Enthusiast
+            <Typewriter
+              words={[
+                'Machine Learning Engineer',
+                'Data Scientist',
+                'Python Developer',
+              ]}
+              loop={true}
+              cursor
+              cursorStyle="|"
+              typeSpeed={70}
+              deleteSpeed={50}
+              delaySpeed={1500}
+            />
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -80,8 +116,7 @@ const HeroSection = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className={`mb-8 max-w-lg ${theme === 'dark' ? 'text-gray-300' : 'text-gray-600'}`}
           >
-            I create beautiful, functional, and responsive web applications with
-            modern technologies. Let's build something amazing together!
+              I'm a Machine Learning Engineer who loves turning complex problems into simple, scalable solutions. I work with Python, data pipelines, and ML models to automate and optimize workflows. Always learning. Always building.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -99,12 +134,23 @@ const HeroSection = () => {
                 View Projects
               </motion.button>
             </Link>
+            <a
+              href="/resume/KARTHICK.pdf"
+              download
+              className="px-8 py-3 border-2 border-purple-600 text-purple-600 hover:bg-purple-600 hover:text-white rounded-md font-medium transition-colors flex items-center"
+            >
+              <DownloadIcon className="w-4 h-4 mr-2" /> Resume
+            </a>
           </motion.div>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 1 }} className="flex space-x-4 mt-8">
-            {[GithubIcon, LinkedinIcon, TwitterIcon].map((Icon, i) => (
+            {[
+              { Icon: GithubIcon, url: 'https://github.com/Karthickraja018' },
+              { Icon: LinkedinIcon, url: 'https://www.linkedin.com/in/karthick-raja-e-2004-aiml/' },
+              { Icon: CodeIcon, url: 'https://leetcode.com/u/karthick004/' }
+            ].map(({ Icon, url }, i) => (
               <motion.a
                 key={i}
-                href="#"
+                href={url}
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.1, y: -3 }}
@@ -114,6 +160,11 @@ const HeroSection = () => {
               </motion.a>
             ))}
           </motion.div>
+          
+          {/* Floating Badge */}
+          <div className="absolute top-6 left-6 bg-yellow-400 text-black text-xs font-semibold px-3 py-1 rounded shadow animate-pulse">
+            Open to Work
+          </div>
         </div>
 
         <motion.div
@@ -122,7 +173,7 @@ const HeroSection = () => {
           transition={{ duration: 0.8, delay: 0.5 }}
           className="flex-1 mt-12 md:mt-0 flex justify-center"
         >
-          <div className="relative">
+          <Tilt glareEnable={true} glareMaxOpacity={0.3} scale={1.05} className="relative" tiltMaxAngleX={20} tiltMaxAngleY={10}  transitionSpeed={1500} gyroscope={true}>
             <div className={`absolute inset-0 rounded-full ${theme === 'dark' ? 'bg-purple-700' : 'bg-purple-200'} blur-3xl opacity-20`} />
             <div className="relative w-64 h-64 md:w-80 md:h-80 overflow-hidden rounded-full border-4 border-purple-600 shadow-xl">
               <img
@@ -138,7 +189,7 @@ const HeroSection = () => {
             >
               <code className="text-xs font-bold">{'<coder/>'}</code>
             </motion.div>
-          </div>
+          </Tilt>
         </motion.div>
       </div>
 
